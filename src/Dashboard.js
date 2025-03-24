@@ -46,9 +46,12 @@ class Dashboard extends React.Component {
 
                             // Only update state if there are new unique donations
                             if (uniqueDonations.length > 0) {
-                                const bigDonation = uniqueDonations[0]; // Assume the first new donation is the "big" one
+                                // Sort donations by the created date to ensure they are in the correct order
+                                const sortedDonations = [...uniqueDonations, ...prevState.donations]
+                                    .sort((a, b) => new Date(b.createdDateUTC) - new Date(a.createdDateUTC)); // Sorting by most recent date
+                                const bigDonation = sortedDonations[0]; // Assume the first new donation is the "big" one
                                 return {
-                                    donations: [...uniqueDonations, ...prevState.donations], // Add new donations at the top
+                                    donations: sortedDonations, // Updated sorted list of donations
                                     bigDonation, // Update the "big donation"
                                     isAlertVisible: true, // Show the donation alert
                                 };
